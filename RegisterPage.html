@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AnimoNav Register</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+      background: url('pics/dlsu.jpeg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .left-section, .right-section {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .form-box {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 40px;
+      max-width: 400px;
+      width: 100%;
+      border-radius: 15px;
+      color: white;
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      width: 60px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 25px;
+      background: #f1f1f1;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      border: none;
+      border-radius: 25px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .signup {
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .signup a {
+      color: lightgreen;
+      text-decoration: none;
+    }
+
+    .right-section img {
+      max-width: 250px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .left-section, .right-section {
+        flex: none;
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left-section">
+      <div class="form-box">
+        <div class="logo">
+          <img src="dlsu-icon.png" alt="DLSU Icon">
+        </div>
+        <h2>CREATE ACCOUNT</h2>
+        <form id="registerForm">
+          <input type="email" id="registerEmail" placeholder="Email" required>
+          <input type="password" id="registerPassword" placeholder="Password" required>
+          <input type="password" id="confirmPassword" placeholder="Re-enter Password" required>
+          <button class="btn" type="submit">Register</button>
+          <div class="signup">
+            Already have an account? <a href="LoginPage.html">Sign In</a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="right-section">
+      <img src="animonav-logo.png" alt="AnimoNav Logo">
+    </div>
+  </div>
+
+  <!-- Firebase & JS -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBW4f1GYYlc9dTeDLQoDPJGi3er40Erm8M",
+      authDomain: "capstone-2420.firebaseapp.com",
+      projectId: "capstone-2420",
+      storageBucket: "capstone-2420.appspot.com",
+      messagingSenderId: "361825214112",
+      appId: "1:361825214112:web:963091f3fa2946de2073c5",
+      measurementId: "G-XMSWMC66H5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    document.getElementById('registerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+      }
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          alert("Registered successfully!");
+          window.location.href = "LoginPage.html";
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    });
+  </script>
+</body>
+</html>
