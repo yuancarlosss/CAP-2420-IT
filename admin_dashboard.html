@@ -1,101 +1,397 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Dashboard</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f4f4f4;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Dashboard</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f4f4f4;
+}
 
-    h1 {
-      color: #2c3e50;
-    }
+.configuration-panel {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  max-width: 1000px;
+  margin: 40px auto;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
 
-    .map-container {
-      margin-top: 30px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+.left-panel {
+  flex: 1;
+  min-width: 300px;
+}
 
-    .map-placeholder {
-      width: 600px;
-      height: 400px;
-      border: 2px dashed #ccc;
-      border-radius: 10px;
-      background-color: #eaeaea;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      position: relative;
-    }
+.right-panel {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
-    .map-placeholder:hover {
-      border-color: #4CAF50;
-    }
+h1 {
+  color: #2c3e50;
+  font-size: 24px;
+}
 
-    .map-placeholder img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      border-radius: 10px;
-    }
+.map-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    .instruction {
-      margin-top: 15px;
-      font-size: 14px;
-      color: #555;
-    }
+.map-placeholder {
+  width: 100%;
+  max-width: 400px;
+  height: 250px;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  background-color: #eaeaea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
 
-    input[type="file"] {
-      display: none;
-    }
+.map-placeholder:hover {
+  border-color: #4CAF50;
+}
 
-    @media (max-width: 768px) {
-      .map-placeholder {
-        width: 90%;
-        height: 250px;
-      }
-    }
-  </style>
+.map-placeholder img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.instruction {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.button {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button:hover {
+  background-color: #4CAF50;
+}
+
+.building-toggle {
+  width: 100%;
+}
+
+.building-header {
+  background-color: #34495e;
+  color: #ecf0f1;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.building-list {
+  background-color: #1a252f;
+  color: #ecf0f1;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding: 10px;
+  display: none;
+}
+
+.building-item {
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.floor-list {
+  margin-left: 15px;
+  color: #bdc3c7;
+  font-size: 14px;
+  display: none;
+}
+
+/* Small Box Dashboard Section */
+.dashboard-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px auto;
+  max-width: 1000px;
+  gap: 20px;
+}
+
+.dashboard-box {
+  background-color: #fff;
+  flex: 1 1 calc(25% - 20px);
+  min-width: 200px;
+  height: 120px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.box-icon {
+  width: 60px;
+  height: 60px;
+  background-color: #dfe6e9;
+  border-radius: 10px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.box-icon::before {
+  content: "📷"; /* Placeholder emoji icon */
+  font-size: 24px;
+}
+
+.box-label {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: bold;
+  font-size: 14px;
+  color: #2c3e50;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 99;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.modal-content button {
+  width: 100%;
+  padding: 10px;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.close {
+  float: right;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .map-placeholder {
+    width: 100%;
+    height: 200px;
+  }
+
+  .configuration-panel {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .dashboard-boxes {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .dashboard-box {
+    min-width: 100%;
+  }
+}
+</style>
 </head>
 <body>
 
-  <h1>Welcome, Admin!</h1>
-  <p>Click the map below to upload or change the static map image.</p>
+<!-- DASHBOARD BOXES -->
+<div class="dashboard-boxes">
+  <div class="dashboard-box">
+    <div class="box-icon"></div>
+    <div class="box-label">Rooms Vacant</div>
+  </div>
+  <div class="dashboard-box">
+    <div class="box-icon"></div>
+    <div class="box-label">Devices Online</div>
+  </div>
+  <div class="dashboard-box">
+    <div class="box-icon"></div>
+    <div class="box-label">Maintenance</div>
+  </div>
+  <div class="dashboard-box">
+    <div class="box-icon"></div>
+    <div class="box-label">Notes & Tagging</div>
+  </div>
+</div>
 
-  <div class="map-container">
-    <div class="map-placeholder" onclick="document.getElementById('mapUpload').click()">
-      <span id="placeholderText">Click to upload static map</span>
-      <img id="mapImage" src="" alt="" style="display: none;" />
+<!-- MAIN CONFIGURATION PANEL -->
+<div class="configuration-panel">
+  <!-- LEFT SIDE -->
+  <div class="left-panel">
+    <h1>Upload Static Map</h1>
+    <div class="map-container">
+      <div class="map-placeholder" onclick="document.getElementById('mapUpload').click()">
+        <span id="placeholderText">Click to upload static map</span>
+        <img id="mapImage" src="" alt="" style="display: none;" />
+      </div>
+      <input type="file" id="mapUpload" accept="image/*" onchange="handleImageUpload(event)">
+      <div class="instruction">Only image files are allowed (e.g., JPG, PNG).</div>
     </div>
-    <input type="file" id="mapUpload" accept="image/*" onchange="handleImageUpload(event)">
-    <div class="instruction">Only image files are allowed (e.g., JPG, PNG).</div>
   </div>
 
-  <script>
-    function handleImageUpload(event) {
-      const file = event.target.files[0];
-      if (file && file.type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const mapImage = document.getElementById("mapImage");
-          mapImage.src = e.target.result;
-          mapImage.style.display = "block";
-          document.getElementById("placeholderText").style.display = "none";
-        };
-        reader.readAsDataURL(file);
-      } else {
-        alert("Please select a valid image file.");
+  <!-- RIGHT SIDE -->
+  <div class="right-panel">
+    <button class="button" onclick="openModal()">Configure Room & Building</button>
+    <div class="building-toggle">
+      <div class="building-header" onclick="toggleBuildingList()">View Configured Buildings</div>
+      <div class="building-list" id="buildingList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL POPUP -->
+<div id="configModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2>Configure Building</h2>
+    <label>School Name:</label>
+    <input type="text" id="schoolName" placeholder="Enter school name" />
+    <label>Room Name:</label>
+    <input type="text" id="roomName" placeholder="Enter room name" />
+    <label>Number of Floors:</label>
+    <input type="number" id="floorCount" placeholder="Enter number of floors" />
+    <button onclick="saveConfiguration()">Save</button>
+  </div>
+</div>
+
+<script>
+const buildingData = {};
+let isBuildingListVisible = false;
+
+function openModal() {
+  document.getElementById("configModal").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("configModal").style.display = "none";
+}
+
+function saveConfiguration() {
+  const school = document.getElementById("schoolName").value.trim();
+  const room = document.getElementById("roomName").value.trim();
+  const floor = parseInt(document.getElementById("floorCount").value);
+
+  if (!school || !room || isNaN(floor) || floor <= 0) {
+    alert("Please fill in all fields correctly.");
+    return;
+  }
+
+  const buildingKey = `${school} - ${room}`;
+  buildingData[buildingKey] = floor;
+
+  updateBuildingList();
+  closeModal();
+  alert(`Saved: ${buildingKey} with ${floor} floors`);
+
+  document.getElementById("schoolName").value = "";
+  document.getElementById("roomName").value = "";
+  document.getElementById("floorCount").value = "";
+}
+
+function updateBuildingList() {
+  const listContainer = document.getElementById("buildingList");
+  listContainer.innerHTML = "";
+
+  for (const building in buildingData) {
+    const item = document.createElement("div");
+    item.className = "building-item";
+    item.textContent = building;
+    item.onclick = function () {
+      const floors = document.createElement("div");
+      floors.className = "floor-list";
+      floors.innerHTML = "";
+      for (let i = 1; i <= buildingData[building]; i++) {
+        const floor = document.createElement("div");
+        floor.textContent = `Floor ${i}`;
+        floors.appendChild(floor);
       }
-    }
-  </script>
+
+      const existing = item.querySelector(".floor-list");
+      if (existing) {
+        existing.remove();
+      } else {
+        item.appendChild(floors);
+      }
+    };
+    listContainer.appendChild(item);
+  }
+}
+
+function toggleBuildingList() {
+  const list = document.getElementById("buildingList");
+  isBuildingListVisible = !isBuildingListVisible;
+  list.style.display = isBuildingListVisible ? "block" : "none";
+}
+
+function handleImageUpload(event) {
+  const file = event.target.files[0];
+  if (file && file.type.startsWith("image/")) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const mapImage = document.getElementById("mapImage");
+      mapImage.src = e.target.result;
+      mapImage.style.display = "block";
+      document.getElementById("placeholderText").style.display = "none";
+    };
+    reader.readAsDataURL(file);
+  } else {
+    alert("Please select a valid image file.");
+  }
+}
+</script>
 
 </body>
 </html>
