@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AnimoNav Login</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -55,7 +52,7 @@
       margin-bottom: 30px;
     }
 
-    input[type="email"],
+    input[type="text"],
     input[type="password"] {
       width: 100%;
       padding: 12px;
@@ -63,6 +60,13 @@
       border: none;
       border-radius: 25px;
       background: #f1f1f1;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
     }
 
     .btn {
@@ -75,6 +79,18 @@
       font-size: 16px;
       cursor: pointer;
       margin-top: 10px;
+    }
+
+    .social-login {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .social-login img {
+      width: 40px;
+      cursor: pointer;
     }
 
     .signup {
@@ -95,7 +111,6 @@
       .container {
         flex-direction: column;
       }
-
       .left-section, .right-section {
         flex: none;
         width: 100%;
@@ -113,9 +128,19 @@
         </div>
         <h2>WELCOME BACK!</h2>
         <form id="loginForm">
-          <input type="email" id="loginEmail" placeholder="Email" required>
-          <input type="password" id="loginPassword" placeholder="Password" required>
+          <input type="text" id="email" placeholder="Email" required>
+          <input type="password" id="password" placeholder="Password" required>
+          <div class="remember">
+            <label><input type="checkbox"> Remember me</label>
+            <a href="#" style="color: lightgreen;">Forgot password?</a>
+          </div>
           <button class="btn" type="submit">Sign In</button>
+          <p style="text-align:center; margin: 20px 0;">or continue with</p>
+          <div class="social-login">
+            <img src="pics/google.png" alt="Google">
+            <img src="facebook-icon.png" alt="Facebook">
+            <img src="apple-icon.png" alt="Apple">
+          </div>
           <div class="signup">
             Don’t have an account? <a href="RegisterPage.html">Sign up</a>
           </div>
@@ -127,38 +152,19 @@
     </div>
   </div>
 
-  <!-- Firebase & JS -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault();
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBW4f1GYYlc9dTeDLQoDPJGi3er40Erm8M",
-      authDomain: "capstone-2420.firebaseapp.com",
-      projectId: "capstone-2420",
-      storageBucket: "capstone-2420.appspot.com",
-      messagingSenderId: "361825214112",
-      appId: "1:361825214112:web:963091f3fa2946de2073c5",
-      measurementId: "G-XMSWMC66H5"
-    };
+      const email = document.getElementById("email").value.toLowerCase();
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          alert("Login successful!");
-          // Redirect to your dashboard or homepage
-          window.location.href = "Dashboard.html";
-        })
-        .catch((error) => {
-          alert("Login failed: " + error.message);
-        });
+      if (email.startsWith("admin@")) {
+        window.location.href = "admin_dashboard.html";
+      } else if (email.startsWith("maintenance@")) {
+        window.location.href = "maintenance_dashboard.html";
+      } else {
+        window.location.href = "users_dashboard.html";
+      }
     });
   </script>
 </body>

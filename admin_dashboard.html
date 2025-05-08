@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    .map-container {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .map-placeholder {
+      width: 600px;
+      height: 400px;
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      background-color: #eaeaea;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .map-placeholder:hover {
+      border-color: #4CAF50;
+    }
+
+    .map-placeholder img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .instruction {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .map-placeholder {
+        width: 90%;
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Welcome, Admin!</h1>
+  <p>Click the map below to upload or change the static map image.</p>
+
+  <div class="map-container">
+    <div class="map-placeholder" onclick="document.getElementById('mapUpload').click()">
+      <span id="placeholderText">Click to upload static map</span>
+      <img id="mapImage" src="" alt="" style="display: none;" />
+    </div>
+    <input type="file" id="mapUpload" accept="image/*" onchange="handleImageUpload(event)">
+    <div class="instruction">Only image files are allowed (e.g., JPG, PNG).</div>
+  </div>
+
+  <script>
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file && file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const mapImage = document.getElementById("mapImage");
+          mapImage.src = e.target.result;
+          mapImage.style.display = "block";
+          document.getElementById("placeholderText").style.display = "none";
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert("Please select a valid image file.");
+      }
+    }
+  </script>
+
+</body>
+</html>
