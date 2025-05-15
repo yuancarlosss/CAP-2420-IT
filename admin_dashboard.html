@@ -1,230 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Admin Dashboard</title>
-<style>
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background-color: #f4f4f4;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <style>
+    
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
 
-.configuration-panel {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  max-width: 1000px;
-  margin: 40px auto;
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
+    .top-tab {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding: 25px 20px;
+      color: #ecf0f1;
+      z-index: 1000;
+      background: url('pics/dlsu.jpeg') center/cover no-repeat;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-.left-panel {
-  flex: 1;
-  min-width: 300px;
-}
+    .tab-title {
+      font-size: 20px;
+      font-weight: bold;
+    }
 
-.right-panel {
-  flex: 1;
-  min-width: 300px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
+    .signout-button {
+    background: none;
+    color: white;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 30px;
+    }
 
-h1 {
-  color: #2c3e50;
-  font-size: 24px;
-}
+    .configuration-panel {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      max-width: 1000px;
+      margin: 40px auto;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
 
-.map-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+    .left-panel {
+      flex: 1;
+      min-width: 300px;
+    }
 
-.map-placeholder {
-  width: 100%;
-  max-width: 400px;
-  height: 250px;
-  border: 2px dashed #ccc;
-  border-radius: 10px;
-  background-color: #eaeaea;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position: relative;
-}
+    .right-panel {
+      flex: 1;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
 
-.map-placeholder:hover {
-  border-color: #4CAF50;
-}
+    h1 {
+      color: #046013;
+      font-size: 24px;
+    }
 
-.map-placeholder img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  border-radius: 10px;
-}
+    .map-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-.instruction {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #555;
-}
+    .map-placeholder {
+      width: 100%;
+      max-width: 400px;
+      height: 250px;
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      background-color: #eaeaea;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
 
-input[type="file"] {
-  display: none;
-}
+    .map-placeholder:hover {
+      border-color: #4CAF50;
+    }
 
-.button {
-  background-color: #2c3e50;
-  color: #ecf0f1;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  width: 100%;
-}
+    .map-placeholder img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 10px;
+    }
 
-.button:hover {
-  background-color: #4CAF50;
-}
+    .instruction {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
+    }
 
-.building-toggle {
-  width: 100%;
-}
+    input[type="file"] {
+      display: none;
+    }
 
-.building-header {
-  background-color: #34495e;
-  color: #ecf0f1;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: center;
-}
+    .button,
+    .building-header {
+    background-color: #046013;
+    color: #ecf0f1;
+    border: none;
+    margin-top: 60px;
+    padding: 12px 20px;      /* unified padding */
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;             /* both full width */
+    font-size: 16px;         /* unified font size */
+    font-weight: 600;        /* consistent font weight */
+    text-align: center;
+    box-sizing: border-box;  /* ensures padding included in width */
+    transition: background-color 0.3s ease;
+    }
 
-.building-list {
-  background-color: #1a252f;
-  color: #ecf0f1;
-  border-radius: 5px;
-  margin-top: 10px;
-  padding: 10px;
-  display: none;
-}
+    .button:hover,
+    .building-header:hover {
+    background-color: #4CAF50;
+    }
 
-.building-item {
-  margin-bottom: 5px;
-  cursor: pointer;
-}
-
-.floor-list {
-  margin-left: 15px;
-  color: #bdc3c7;
-  font-size: 14px;
-  display: none;
-}
-
-/* Small Box Dashboard Section */
-.dashboard-boxes {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin: 20px auto;
-  max-width: 1000px;
-  gap: 20px;
-}
-
-.dashboard-box {
-  background-color: #fff;
-  flex: 1 1 calc(25% - 20px);
-  min-width: 200px;
-  height: 120px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  position: relative;
-}
-
-.box-icon {
-  width: 60px;
-  height: 60px;
-  background-color: #dfe6e9;
-  border-radius: 10px;
-  margin-right: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.box-icon::before {
-  content: "📷"; /* Placeholder emoji icon */
-  font-size: 24px;
-}
-
-.box-label {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-weight: bold;
-  font-size: 14px;
-  color: #2c3e50;
-}
-
-/* Modal styles */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 99;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-  background-color: #fff;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 10px;
-  width: 300px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
-
-.modal-content input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-}
-
-.modal-content button {
-  width: 100%;
-  padding: 10px;
-  background-color: #2c3e50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-}
-
-.close {
-  float: right;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-@media (max-width: 768px) {
-  .map-placeholder {
+    .building-toggle {
     width: 100%;
     }
 
