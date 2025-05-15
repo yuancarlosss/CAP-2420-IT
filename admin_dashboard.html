@@ -226,26 +226,148 @@ input[type="file"] {
 @media (max-width: 768px) {
   .map-placeholder {
     width: 100%;
-    height: 200px;
-  }
+    }
 
-  .configuration-panel {
-    flex-direction: column;
+    .building-list {
+    background-color: #9a9797;
+    color: #ffffff;
+    border-radius: 5px;
+    margin-top: 10px;
     padding: 10px;
-  }
+    display: none;
+    }
 
-  .dashboard-boxes {
-    flex-direction: column;
-    gap: 10px;
-  }
+    .building-item {
+    margin-bottom: 5px;
+    cursor: pointer;
+    }
 
-  .dashboard-box {
-    min-width: 100%;
-  }
-}
-</style>
+    .floor-list {
+      margin-left: 15px;
+      color: #bdc3c7;
+      font-size: 14px;
+      display: none;
+    }
+
+    .dashboard-boxes {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      margin: 100px auto 10px; /* Added top margin for spacing below top-tab */
+      max-width: 850px;
+      gap: 10px;
+    }
+
+    .dashboard-box {
+      background-color: #fff;
+      flex: 0 0 calc(25% - 10px);
+      min-width: 0;
+      height: 120px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .box-icon {
+      width: 60px;
+      height: 60px;
+      background-color: #dfe6e9;
+      border-radius: 10px;
+      margin-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .box-icon::before {
+      content: "📷";
+      font-size: 24px;
+    }
+
+    .box-label {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: bold;
+      font-size: 14px;
+      color: #000000;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 99;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+
+    .modal-content button {
+      width: 100%;
+      padding: 10px;
+      background-color: #046013;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .close {
+      float: right;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .map-placeholder {
+        width: 100%;
+        height: 200px;
+      }
+
+      .configuration-panel {
+        flex-direction: column;
+        padding: 10px;
+      }
+
+      .dashboard-boxes {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .dashboard-box {
+        min-width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Sticky Top Tab with Wallpaper Background -->
+  <div class="top-tab">
+    <span class="tab-title">Welcome ADMIN!</span>
+    <button class="signout-button" onclick="signOut()">Sign Out</button>
+  </div>
 
 <!-- DASHBOARD BOXES -->
 <div class="dashboard-boxes">
@@ -299,8 +421,8 @@ input[type="file"] {
     <h2>Configure Building</h2>
     <label>School Name:</label>
     <input type="text" id="schoolName" placeholder="Enter school name" />
-    <label>Room Name:</label>
-    <input type="text" id="roomName" placeholder="Enter room name" />
+    <label>Building Name:</label>
+    <input type="text" id="buildName" placeholder="Enter Building name" />
     <label>Number of Floors:</label>
     <input type="number" id="floorCount" placeholder="Enter number of floors" />
     <button onclick="saveConfiguration()">Save</button>
@@ -321,7 +443,7 @@ function closeModal() {
 
 function saveConfiguration() {
   const school = document.getElementById("schoolName").value.trim();
-  const room = document.getElementById("roomName").value.trim();
+  const room = document.getElementById("buildName").value.trim();
   const floor = parseInt(document.getElementById("floorCount").value);
 
   if (!school || !room || isNaN(floor) || floor <= 0) {
@@ -337,7 +459,7 @@ function saveConfiguration() {
   alert(`Saved: ${buildingKey} with ${floor} floors`);
 
   document.getElementById("schoolName").value = "";
-  document.getElementById("roomName").value = "";
+  document.getElementById("buildName").value = "";
   document.getElementById("floorCount").value = "";
 }
 
@@ -391,6 +513,14 @@ function handleImageUpload(event) {
     alert("Please select a valid image file.");
   }
 }
+
+function signOut() {
+  if (confirm("Are you sure you want to sign out?")) {
+    // Example action: redirect to login page
+    window.location.href = "LoginPage.html"; // Change this to your actual login page
+  }
+}
+
 </script>
 
 </body>
