@@ -4,273 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard</title>
-  <style>
-    
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-color: #f4f4f4;
-    }
-
-    .top-tab {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      padding: 25px 20px;
-      color: #ecf0f1;
-      z-index: 1000;
-      background: url('pics/dlsu.jpeg') center/cover no-repeat;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .tab-title {
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    .signout-button {
-    background: none;
-    color: white;
-    border: none;
-    padding: 0;
-    font-size: 14px;
-    cursor: pointer;
-    margin-left: auto;
-    margin-right: 30px;
-    }
-
-    .configuration-panel {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      max-width: 1000px;
-      margin: 40px auto;
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: space-between;
-    }
-
-    .left-panel {
-      flex: 1;
-      min-width: 300px;
-    }
-
-    .right-panel {
-      flex: 1;
-      min-width: 300px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    h1 {
-      color: #046013;
-      font-size: 24px;
-    }
-
-    .map-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .map-placeholder {
-      width: 100%;
-      max-width: 400px;
-      height: 250px;
-      border: 2px dashed #ccc;
-      border-radius: 10px;
-      background-color: #eaeaea;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      position: relative;
-    }
-
-    .map-placeholder:hover {
-      border-color: #4CAF50;
-    }
-
-    .map-placeholder img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      border-radius: 10px;
-    }
-
-    .instruction {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #555;
-    }
-
-    input[type="file"] {
-      display: none;
-    }
-
-    .button,
-    .building-header {
-    background-color: #046013;
-    color: #ecf0f1;
-    border: none;
-    margin-top: 60px;
-    padding: 12px 20px;      /* unified padding */
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;             /* both full width */
-    font-size: 16px;         /* unified font size */
-    font-weight: 600;        /* consistent font weight */
-    text-align: center;
-    box-sizing: border-box;  /* ensures padding included in width */
-    transition: background-color 0.3s ease;
-    }
-
-    .button:hover,
-    .building-header:hover {
-    background-color: #4CAF50;
-    }
-
-    .building-toggle {
-    width: 100%;
-    }
-
-    .building-list {
-    background-color: #9a9797;
-    color: #ffffff;
-    border-radius: 5px;
-    margin-top: 10px;
-    padding: 10px;
-    display: none;
-    }
-
-    .building-item {
-    margin-bottom: 5px;
-    cursor: pointer;
-    }
-
-    .floor-list {
-      margin-left: 15px;
-      color: #bdc3c7;
-      font-size: 14px;
-      display: none;
-    }
-
-    .dashboard-boxes {
-      display: flex;
-      flex-wrap: nowrap;
-      justify-content: space-between;
-      margin: 100px auto 10px; /* Added top margin for spacing below top-tab */
-      max-width: 850px;
-      gap: 10px;
-    }
-
-    .dashboard-box {
-      background-color: #fff;
-      flex: 0 0 calc(25% - 10px);
-      min-width: 0;
-      height: 120px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      position: relative;
-    }
-
-    .box-icon {
-      width: 60px;
-      height: 60px;
-      background-color: #dfe6e9;
-      border-radius: 10px;
-      margin-right: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .box-icon::before {
-      content: "📷";
-      font-size: 24px;
-    }
-
-    .box-label {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-weight: bold;
-      font-size: 14px;
-      color: #000000;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 99;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.5);
-    }
-
-    .modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      padding: 20px;
-      border-radius: 10px;
-      width: 300px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    }
-
-    .modal-content input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-    }
-
-    .modal-content button {
-      width: 100%;
-      padding: 10px;
-      background-color: #046013;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-
-    .close {
-      float: right;
-      font-size: 22px;
-      cursor: pointer;
-    }
-
-    @media (max-width: 768px) {
-      .map-placeholder {
-        width: 100%;
-        height: 200px;
-      }
-
-      .configuration-panel {
-        flex-direction: column;
-        padding: 10px;
-      }
-
-      .dashboard-boxes {
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .dashboard-box {
-        min-width: 100%;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="admin_dashboard.css" />
 </head>
 <body>
 
@@ -317,20 +51,37 @@
 
   <!-- RIGHT SIDE -->
   <div class="right-panel">
+    <button class="button" onclick="openCampusModal()">Configure Campuses</button>
     <button class="button" onclick="openModal()">Configure Room & Building</button>
     <div class="building-toggle">
       <div class="building-header" onclick="toggleBuildingList()">View Configured Buildings</div>
       <div class="building-list" id="buildingList"></div>
+      <button class="button" style="margin-top: 10px;" onclick="toggleCampusList()">View Campuses</button>
+      <div id="campusList" style="margin-top: 15px; color: #046013; font-weight: bold; display: none;"></div>
     </div>
   </div>
 </div>
+
+<!-- CAMPUS CONFIGURATION MODAL -->
+<div id="campusModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeCampusModal()">&times;</span>
+    <h2>Configure Campus</h2>
+    <label>Campus Name:</label>
+    <input type="text" id="campusName" placeholder="Enter campus name" />
+    <label>Campus Address:</label>
+    <input type="text" id="campusAddress" placeholder="Enter campus address" />
+    <button onclick="saveCampus()">Save Campus</button>
+  </div>
+</div>
+
 
 <!-- MODAL POPUP -->
 <div id="configModal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">&times;</span>
     <h2>Configure Building</h2>
-    <label>School Name:</label>
+    <label>Select Campus:</label>
     <input type="text" id="schoolName" placeholder="Enter school name" />
     <label>Building Name:</label>
     <input type="text" id="buildName" placeholder="Enter Building name" />
@@ -341,15 +92,60 @@
 </div>
 
 <script>
-const buildingData = {};
-let isBuildingListVisible = false;
 
+
+const buildingData = {}; //building list
+const campusData = {}; // campus list
+
+//data list is set to fasle (not visible)
+let isBuildingListVisible = false;
+let isCampusListVisible = false;
+
+//opens the dialog box for room & building
 function openModal() {
   document.getElementById("configModal").style.display = "block";
 }
-
+//closes the dialog box for room and building
 function closeModal() {
   document.getElementById("configModal").style.display = "none";
+}
+//opens the dialog box for configure campuses
+function openCampusModal(){
+  document.getElementById("campusModal").style.display = "block";
+}
+//close the dialog box for configure campuses
+function closeCampusModal(){
+  document.getElementById("campusModal").style.display = "none";
+}
+
+//saves the data of the newly added campus
+function saveCampus(){
+  const campus = document.getElementById("campusName").value.trim();
+  const address = document.getElementById("campusAddress").value.trim();
+
+  if (!campus || !address){ //campus and address has no inputs then alert
+    alert("Please fill in both campus and address.");
+    return;
+  }
+
+  campusData[campus] = address;
+  updateCampusList();
+  closeCampusModal();
+  alert(`Campus "${campus}" saved successfully`);
+
+  document.getElementById("campusName").value = "";
+  document.getElementById("campusAddress").value = "";
+}
+
+function updateCampusList(){
+  const listContainer = document.getElementById("campusList");
+  listContainer.innerHTML = "<h3>Configured Campuses:</h3>";
+
+  for (const campus in campusData) {
+    const item = document.createElement("div");
+    item.textContent = `${campus} - ${campusData[campus]}`;
+    listContainer.appendChild(item);
+  }
 }
 
 function saveConfiguration() {
@@ -403,11 +199,19 @@ function updateBuildingList() {
   }
 }
 
+//SHOWS LIST OF EXISITNG BUILDINGS
 function toggleBuildingList() {
   const list = document.getElementById("buildingList");
   isBuildingListVisible = !isBuildingListVisible;
   list.style.display = isBuildingListVisible ? "block" : "none";
 }
+//SHOWS LIST OF EXISITNG CAMPUSES
+function toggleCampusList() {
+  const list = document.getElementById("campusList");
+  isCampusListVisible = !isCampusListVisible;
+  list.style.display = isCampusListVisible ? "block" : "none";
+}
+
 
 function handleImageUpload(event) {
   const file = event.target.files[0];
