@@ -81,17 +81,23 @@
   <div class="modal-content">
     <span class="close" onclick="closeModal()">&times;</span>
     <h2>Configure Building</h2>
+
     <label>Select Campus:</label>
-    <select id="campusDropdown">
-  <!-- Options will be dynamically populated -->
+    <select id="campusDropdown" onchange="handleCampusChange()">
+      <option value="no-campus" selected disabled>Select a campus</option>
+      <!-- Campus options will be populated dynamically -->
     </select>
+
     <label>Building Name:</label>
     <input type="text" id="buildName" placeholder="Enter Building name" />
+
     <label>Number of Floors:</label>
     <input type="number" id="floorCount" placeholder="Enter number of floors" />
-    <button onclick="saveConfiguration()">Save</button>
+
+    <button id="saveBuildingBtn" onclick="saveConfiguration()" disabled>Save</button>
   </div>
 </div>
+
 
 <script>
 
@@ -118,6 +124,12 @@ function openCampusModal(){
 //close the dialog box for configure campuses
 function closeCampusModal(){
   document.getElementById("campusModal").style.display = "none";
+}
+
+function handleCampusChange() {
+  const dropdown = document.getElementById("campusDropdown");
+  const saveBtn = document.getElementById("saveBuildingBtn");
+  saveBtn.disabled = dropdown.value === "no-campus";
 }
 
 //saves the data of the newly added campus
@@ -151,12 +163,20 @@ function updateCampusList(){
 }
 
 function saveConfiguration() {
-  const campus = document.getElementById("campusDropdown").value;
+  const campusDropdown = document.getElementById("campusDropdown");
+  const campus = campusDropdown.value;
   const building = document.getElementById("buildName").value.trim();
   const floor = parseInt(document.getElementById("floorCount").value);
 
-  if (!campus || !building || isNaN(floor) || floor <= 0) {
-    alert("Please fill in all fields correctly.");
+  // Prevent saving if no campus is selected (placeholder has value "no-campus")
+  if (!campus || campus === "no-campus") {
+    alert("Please select a campus before saving the building.");
+    return;
+  }
+
+  // Validate other fields
+  if (!building || isNaN(floor) || floor <= 0) {
+    alert("Please enter a valid building name and floor count.");
     return;
   }
 
@@ -167,9 +187,12 @@ function saveConfiguration() {
   closeModal();
   alert(`Saved: ${buildingKey} with ${floor} floors`);
 
+  // Reset form
   document.getElementById("buildName").value = "";
   document.getElementById("floorCount").value = "";
 }
+
+
 
 
 function updateBuildingList() {
@@ -217,25 +240,32 @@ function toggleCampusList() {
 //POPULATE DROPDOWN FOR CAMPUS SELECTION
 function populateCampusDropdown() {
   const dropdown = document.getElementById("campusDropdown");
-  dropdown.innerHTML = "";
+  const saveBtn = document.getElementById("saveBuildingBtn");
+  dropdown.innerHTML = ""; // Clear old options
 
-  const campusKeys = Object.keys(campusData);
+  const placeholder = document.createElement("option");
+  placeholder.value = "no-campus";
+  placeholder.textContent = "Select a campus";
+  placeholder.disabled = true;
+  placeholder.selected = true;
+  dropdown.appendChild(placeholder);
 
-  if (campusKeys.length === 0) {
-    const placeholder = document.createElement("option");
-    placeholder.textContent = "No campus found";
-    placeholder.disabled = true;
-    placeholder.selected = true;
-    dropdown.appendChild(placeholder);
-  } else {
-    campusKeys.forEach(campus => {
-      const option = document.createElement("option");
-      option.value = campus;
-      option.textContent = campus;
-      dropdown.appendChild(option);
-    });
+  for (const campus in campusData) {
+    const option = document.createElement("option");
+    option.value = campus;
+    option.textContent = campus;
+    dropdown.appendChild(option);
   }
+
+  // Initially disable the button
+  saveBtn.disabled = false;
+
+  // Enable save button only when valid campus selected
+  dropdown.addEventListener("change", () => {
+    saveBtn.disabled = dropdown.value === "no-campus";
+  });
 }
+
 
 function handleImageUpload(event) {
   const file = event.target.files[0];
