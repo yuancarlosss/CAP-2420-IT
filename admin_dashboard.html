@@ -82,7 +82,9 @@
     <span class="close" onclick="closeModal()">&times;</span>
     <h2>Configure Building</h2>
     <label>Select Campus:</label>
-    <input type="text" id="schoolName" placeholder="Enter school name" />
+    <select id="campusDropdown">
+  <!-- Options will be dynamically populated -->
+    </select>
     <label>Building Name:</label>
     <input type="text" id="buildName" placeholder="Enter Building name" />
     <label>Number of Floors:</label>
@@ -93,7 +95,6 @@
 
 <script>
 
-
 const buildingData = {}; //building list
 const campusData = {}; // campus list
 
@@ -103,6 +104,7 @@ let isCampusListVisible = false;
 
 //opens the dialog box for room & building
 function openModal() {
+  populateCampusDropdown(); // Load campuses into dropdown
   document.getElementById("configModal").style.display = "block";
 }
 //closes the dialog box for room and building
@@ -149,26 +151,26 @@ function updateCampusList(){
 }
 
 function saveConfiguration() {
-  const school = document.getElementById("schoolName").value.trim();
-  const room = document.getElementById("buildName").value.trim();
+  const campus = document.getElementById("campusDropdown").value;
+  const building = document.getElementById("buildName").value.trim();
   const floor = parseInt(document.getElementById("floorCount").value);
 
-  if (!school || !room || isNaN(floor) || floor <= 0) {
+  if (!campus || !building || isNaN(floor) || floor <= 0) {
     alert("Please fill in all fields correctly.");
     return;
   }
 
-  const buildingKey = `${school} - ${room}`;
+  const buildingKey = `${campus} - ${building}`;
   buildingData[buildingKey] = floor;
 
   updateBuildingList();
   closeModal();
   alert(`Saved: ${buildingKey} with ${floor} floors`);
 
-  document.getElementById("schoolName").value = "";
   document.getElementById("buildName").value = "";
   document.getElementById("floorCount").value = "";
 }
+
 
 function updateBuildingList() {
   const listContainer = document.getElementById("buildingList");
@@ -212,6 +214,28 @@ function toggleCampusList() {
   list.style.display = isCampusListVisible ? "block" : "none";
 }
 
+//POPULATE DROPDOWN FOR CAMPUS SELECTION
+function populateCampusDropdown() {
+  const dropdown = document.getElementById("campusDropdown");
+  dropdown.innerHTML = "";
+
+  const campusKeys = Object.keys(campusData);
+
+  if (campusKeys.length === 0) {
+    const placeholder = document.createElement("option");
+    placeholder.textContent = "No campus found";
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    dropdown.appendChild(placeholder);
+  } else {
+    campusKeys.forEach(campus => {
+      const option = document.createElement("option");
+      option.value = campus;
+      option.textContent = campus;
+      dropdown.appendChild(option);
+    });
+  }
+}
 
 function handleImageUpload(event) {
   const file = event.target.files[0];
