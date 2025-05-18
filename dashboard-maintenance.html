@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maintenance Dashboard</title>
+  <script src="dashboard-maintenance.js" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen p-6">
+
+  <div class="max-w-7xl mx-auto space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+      <h1 class="text-2xl font-bold">Maintenance Dashboard</h1>
+      <div class="relative">
+        <button class="bg-yellow-500 text-black px-4 py-2 rounded" onclick="addTicket()">Add Ticket</button>
+        <span id="notifCount"
+              class="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">0</span>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+      <div class="bg-gray-800 p-4 rounded-lg">
+        <h2 class="text-lg font-semibold">Scheduled</h2>
+        <p id="countScheduled" class="text-2xl font-bold mt-2">0</p>
+      </div>
+      <div class="bg-gray-800 p-4 rounded-lg">
+        <h2 class="text-lg font-semibold">In Progress</h2>
+        <p id="countInProgress" class="text-2xl font-bold mt-2">0</p>
+      </div>
+      <div class="bg-gray-800 p-4 rounded-lg">
+        <h2 class="text-lg font-semibold">Completed</h2>
+        <p id="countCompleted" class="text-2xl font-bold mt-2">0</p>
+      </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="space-x-2">
+      <button class="bg-blue-700 px-3 py-1 rounded" onclick="filterTickets('Scheduled')">Scheduled</button>
+      <button class="bg-yellow-600 px-3 py-1 rounded" onclick="filterTickets('In Progress')">In Progress</button>
+      <button class="bg-green-600 px-3 py-1 rounded" onclick="filterTickets('Completed')">Completed</button>
+      <button class="bg-gray-600 px-3 py-1 rounded" onclick="location.reload()">Show All</button>
+    </div>
+
+    <!-- Ticket Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full table-auto text-sm mt-4">
+        <thead>
+          <tr class="bg-gray-700">
+            <th class="text-left p-2">Building</th>
+            <th class="text-left p-2">Room</th>
+            <th class="text-left p-2">Issue</th>
+            <th class="text-left p-2">Notes</th>
+            <th class="text-left p-2">Time Reported</th>
+            <th class="text-left p-2">Status</th>
+            <th class="text-left p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="ticketTable">
+          <!-- Tickets will be dynamically inserted here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Custom styles for status badges -->
+  <style>
+    .status-scheduled {
+      background-color: #3B82F6;
+      color: white;
+    }
+    .status-inprogress {
+      background-color: #FACC15;
+      color: black;
+    }
+    .status-completed {
+      background-color: #10B981;
+      color: white;
+    }
+  </style>
+
+</body>
+</html>
