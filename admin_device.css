@@ -22,6 +22,16 @@ body {
   font-weight: bold;
 }
 
+.dashboard-button {
+  background-color: #2b7a78;
+  color: white;
+  padding: 8px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+
 .signout-button {
   background: none;
   color: white;
@@ -33,7 +43,94 @@ body {
   margin-right: 30px;
 }
 
-h1 {
+h1, h2 {
   color: #046013;
   font-size: 24px;
+  margin-top: 0;
+}
+
+/* Main Layout Container */
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 120px 20px 20px 20px; /* accounts for fixed top tab */
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.device-form, .device-list {
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+/* Left Panel (Form) */
+.device-form {
+  flex: 1;
+  max-width: 400px;
+  min-width: 280px;
+}
+
+/* Right Panel (Device List) */
+.device-list {
+  flex: 2;
+  min-width: 300px;
+}
+
+.device-form label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.device-form input,
+.device-form select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.device-form button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #2b7a78;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.device-item {
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #eef;
+  border-left: 5px solid #2b7a78;
+  border-radius: 4px;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  display: inline-block;
+}
+
+.status-online {
+  background-color: #28a745; /* green */
+}
+
+.status-offline {
+  background-color: #dc3545; /* red */
+}
+
+.status-maintenance {
+  background-color: #ffc107; /* yellow */
+  color: #000; /* better contrast on yellow */
 }
