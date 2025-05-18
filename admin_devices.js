@@ -13,28 +13,43 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function addDevice() {
-  const id = document.getElementById("deviceId").value.trim();
+  // ID is auto-generated
+  const id = `D-${devices.length.toString().padStart(2, '0')}`;
+
   const name = document.getElementById("deviceName").value.trim();
   const room = document.getElementById("roomAssigned").value.trim();
   const status = document.getElementById("deviceStatus").value;
   const remarks = document.getElementById("deviceRemarks").value.trim();
 
-  if (!id || !name || !room || !status) {
+  if (!name || !room || !status) {
     alert("Please fill in all fields.");
     return;
   }
 
-  // Prevent duplicate device IDs
-  if (devices.some(device => device.id === id)) {
-    alert("Device ID already exists.");
+  // Prevent duplicates: check if device with same name AND room exists
+  const duplicate = devices.some(d => d.name.toLowerCase() === name.toLowerCase() && d.room.toLowerCase() === room.toLowerCase());
+
+  if (duplicate) {
+    alert("A device with the same Name and Room already exists.");
     return;
   }
 
+
+  // No need to check duplicate ID because it's auto-generated and unique
   const newDevice = { id, name, room, status, remarks };
   devices.push(newDevice);
   updateDeviceList();
   clearAddForm();
   showNotification("Device added!");
+}
+
+function clearAddForm() {
+  // Remove deviceId clearing since it's auto-generated
+  document.getElementById("deviceName").value = "";
+  document.getElementById("roomAssigned").value = "";
+  document.getElementById("deviceStatus").value = "Online";
+  document.getElementById("deviceRemarks").value = "";
+  document.getElementById("statusFilter").value = "All";
 }
 
 function updateDeviceList() {
@@ -74,7 +89,7 @@ function updateDeviceList() {
           ${device.status}
         </span>
       </p>
-      <p><strong>Remarks:</strong> ${device.remarks ? device.remarks : "<em>No remarks</em>"}</p>
+      <p><strong>Remarks:</strong> ${device.remarks || "<em>None</em>"}</p>
       <div class="mt-2 flex gap-3">
         <svg data-action="edit" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600 cursor-pointer hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l6-6m2 2L9 17H3v-6l10-10z" />
