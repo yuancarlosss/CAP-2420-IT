@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rooms Dashboard</title>
+  <link rel="stylesheet" href="admin_roomsVacant.css" />
+
+</head>
+<body>
+     <!-- Sticky Top Tab with Wallpaper Background -->
+  <div class="top-tab">
+    <span class="tab-title">Room Management</span>
+    <button class="signout-button" onclick="signOut()">Sign Out</button>
+  </div>
+
+  <script>
+    function signOut() {
+    if (confirm("Are you sure you want to sign out?")) {
+        // Example action: redirect to login page
+        window.location.href = "LoginPage.html"; // Change this to your actual login page
+    }
+    }
+  </script>
+
+</body>
+</html>
