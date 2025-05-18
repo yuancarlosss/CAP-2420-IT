@@ -4,115 +4,117 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Devices Dashboard</title>
-  <link rel="stylesheet" href="admin_device.css" />
-
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="admin_devices.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@heroicons/vue@2.0.16/outline/index.min.js"></script>
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800 font-sans">
 
-  <!-- Sticky Top Tab with Wallpaper Background -->
-  <div class="top-tab">
-    <span class="tab-title">Devices Dashboard</span>
-    <button class="signout-button" onclick="signOut()">Sign Out</button>
-    <button class="dashboard-button" onclick="goToDashboard()">Return to Dashboard</button>
+  <!-- Top Navigation -->
+  <div class="fixed top-0 w-full bg-blue-900 text-white flex items-center px-6 py-4 shadow z-50">
+    <span class="text-lg font-semibold">Devices Dashboard</span>
+    <button id="signOutBtn" class="ml-auto text-sm hover:underline">Sign Out</button>
+    <button id="returnBtn" class="ml-4 bg-blue-700 hover:bg-blue-800 text-white font-medium py-1.5 px-4 rounded">
+      Return to Dashboard
+    </button>
   </div>
 
-  <!-- Main Content Container -->
-<div class="main-container">
-  <!-- Left Panel: Device Form -->
-  <div class="device-form">
-    <h2>Add New Device</h2>
-    <label>Device ID:</label>
-    <input type="text" id="deviceId" placeholder="Enter Device ID" />
+  <!-- Main Content -->
+  <div class="pt-24 px-6 pb-10 flex flex-col lg:flex-row gap-6 max-w-7xl mx-auto">
+    
+    <div id="notification" class="max-w-7xl mx-auto px-6 hidden">
+      <div class="bg-green-100 text-green-800 font-medium px-4 py-2 rounded mb-4 border border-green-400 shadow"
+          id="successMessage">
+        Device added successfully!
+      </div>
+    </div>
 
-    <label>Device Name:</label>
-    <input type="text" id="deviceName" placeholder="Enter Device Name" />
+    <!-- Left Panel - Device Form -->
+    <div class="w-full lg:w-1/3 bg-white rounded-xl shadow p-6">
+      <h2 class="text-xl font-semibold text-blue-800 mb-4">Add New Device</h2>
 
-    <label>Room Assigned:</label>
-    <input type="text" id="roomAssigned" placeholder="Enter Room" />
+      <label class="block font-medium mt-4">Device ID:</label>
+      <input type="text" id="deviceId" placeholder="Enter Device ID"
+        class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-    <label>Device Status:</label>
-    <select id="deviceStatus">
-      <option value="Online">Online</option>
-      <option value="Offline">Offline</option>
-      <option value="Under Maintenance">Under Maintenance</option>
-    </select>
+      <label class="block font-medium mt-4">Device Name:</label>
+      <input type="text" id="deviceName" placeholder="Enter Device Name"
+        class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-    <button onclick="addDevice()">Add Device</button>
-  </div>
+      <label class="block font-medium mt-4">Room Assigned:</label>
+      <input type="text" id="roomAssigned" placeholder="Enter Room"
+        class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-  <!-- Right Panel: Existing Devices -->
-  <div class="device-list">
-    <h2>Existing Devices</h2>
-    <div id="deviceContainer">
-      <!-- Devices will be listed here -->
+      <label class="block font-medium mt-4">Device Status:</label>
+      <select id="deviceStatus"
+        class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="Online">Online</option>
+        <option value="Offline">Offline</option>
+        <option value="Under Maintenance">Under Maintenance</option>
+      </select>
+
+      <!-- Added Remarks textarea -->
+      <label class="block font-medium mt-4">Remarks:</label>
+      <textarea id="deviceRemarks" rows="3" placeholder="Add remarks about the device..."
+        class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+
+      <button id="addDeviceBtn"
+        class="mt-6 w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 rounded-md">
+        Add Device
+      </button>
+    </div>
+
+    <!-- Right Panel - Device List -->
+    <div class="w-full lg:w-2/3 bg-white rounded-xl shadow p-6">
+      <h2 class="text-xl font-semibold text-blue-800 mb-4">Existing Devices</h2>
+      <div class="mb-4">
+        <label for="statusFilter" class="font-medium mr-2">Filter by Status:</label>
+        <select id="statusFilter"
+          class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="All">All</option>
+          <option value="Online">Online</option>
+          <option value="Offline">Offline</option>
+          <option value="Under Maintenance">Under Maintenance</option>
+        </select>
+      </div>
+
+      <div id="deviceContainer" class="space-y-4">
+        <!-- Devices will be dynamically inserted here -->
+      </div>
     </div>
   </div>
-</div>
 
+  <!-- Edit Modal -->
+  <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 hidden">
+    <div class="bg-white p-6 rounded shadow-lg w-96">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700">Edit Device</h2>
+      <label class="block mb-1 font-medium">Device ID</label>
+      <input id="editDeviceId" class="w-full mb-2 p-2 border rounded" type="text" disabled />
+      
+      <label class="block mb-1 font-medium">Device Name</label>
+      <input id="editDeviceName" class="w-full mb-2 p-2 border rounded" type="text" />
+      
+      <label class="block mb-1 font-medium">Room Assigned</label>
+      <input id="editRoomAssigned" class="w-full mb-2 p-2 border rounded" type="text" />
+      
+      <label class="block mb-1 font-medium">Device Status</label>
+      <select id="editDeviceStatus" class="w-full mb-4 p-2 border rounded">
+        <option value="Online">Online</option>
+        <option value="Offline">Offline</option>
+        <option value="Under Maintenance">Under Maintenance</option>
+      </select>
 
-  <script>
-    const devices = [];
+      <!-- Added Remarks textarea -->
+      <label class="block mb-1 font-medium">Remarks</label>
+      <textarea id="editDeviceRemarks" rows="3"
+        class="w-full mb-4 p-2 border rounded resize-none" placeholder="Add remarks about the device..."></textarea>
 
-    function addDevice() {
-      const id = document.getElementById("deviceId").value.trim();
-      const name = document.getElementById("deviceName").value.trim();
-      const room = document.getElementById("roomAssigned").value.trim();
-      const status = document.getElementById("deviceStatus").value;
+      <div class="flex justify-end space-x-2">
+        <button id="cancelEditBtn" class="bg-gray-500 text-white px-3 py-1 rounded">Cancel</button>
+        <button id="saveEditBtn" class="bg-green-600 text-white px-3 py-1 rounded">Save</button>
+      </div>
+    </div>
+  </div>
 
-      if (!id || !name || !room || !status) {
-        alert("Please fill in all fields.");
-        return;
-      }
-
-      const newDevice = { id, name, room, status };
-      devices.push(newDevice);
-      updateDeviceList();
-
-      // Clear fields
-      document.getElementById("deviceId").value = "";
-      document.getElementById("deviceName").value = "";
-      document.getElementById("roomAssigned").value = "";
-      document.getElementById("deviceStatus").value = "Online";
-    }
-
-    function updateDeviceList() {
-      const container = document.getElementById("deviceContainer");
-      container.innerHTML = "";
-
-      if (devices.length === 0) {
-        container.innerHTML = "<p>No devices added yet.</p>";
-        return;
-      }
-
-      devices.forEach(device => {
-        const div = document.createElement("div");
-        div.className = "device-item";
-
-        let statusClass = "";
-        if (device.status === "Online") statusClass = "status-online";
-        else if (device.status === "Offline") statusClass = "status-offline";
-        else if (device.status === "Under Maintenance") statusClass = "status-maintenance";
-
-
-        div.innerHTML = `
-          <strong>ID:</strong> ${device.id} <br>
-          <strong>Name:</strong> ${device.name} <br>
-          <strong>Room:</strong> ${device.room} <br>
-          <strong>Status:</strong> <span class="status-badge ${statusClass}">${device.status}</span>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function goToDashboard(){
-      window.location.href="admin_dashboard.html";
-    }
-
-    function signOut() {
-      if (confirm("Are you sure you want to sign out?")) {
-        window.location.href = "LoginPage.html"; // change to your actual login page
-      }
-    }
-  </script>
 </body>
 </html>
