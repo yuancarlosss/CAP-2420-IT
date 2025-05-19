@@ -1,4 +1,4 @@
-// Data structure for campuses, buildings, and rooms
+// ---------- Data Structure ----------
 const campuses = [
   {
     id: "campus1",
@@ -20,7 +20,7 @@ const campuses = [
 let selectedCampusId = null;
 let selectedBuildingId = null;
 
-// DOM Elements
+// ---------- DOM Elements ----------
 const campusSelect = document.getElementById("campusSelect");
 const buildingsContainer = document.getElementById("buildingsContainer");
 const addBuildingBtn = document.getElementById("addBuildingBtn");
@@ -31,9 +31,17 @@ const roomsList = document.getElementById("roomsList");
 const newRoomNameInput = document.getElementById("newRoomName");
 const addRoomBtn = document.getElementById("addRoomBtn");
 const closeRoomsModal = document.getElementById("closeRoomsModal");
+const goToDashboard = document.getElementById("goToDashboard");
+const signOutBtn = document.getElementById("signOutBtn");
 
-// Initialize campus dropdown
+// ---------- Initialization ----------
+function init() {
+  populateCampusSelect();
+  attachEventListeners();
+}
+
 function populateCampusSelect() {
+  campusSelect.innerHTML = `<option value="" disabled selected>Select a Campus</option>`;
   campuses.forEach(campus => {
     const option = document.createElement("option");
     option.value = campus.id;
@@ -42,7 +50,31 @@ function populateCampusSelect() {
   });
 }
 
-// Render buildings for selected campus
+// ---------- Event Listeners ----------
+function attachEventListeners() {
+  campusSelect.addEventListener("change", handleCampusChange);
+  newBuildingNameInput.addEventListener("input", updateAddBuildingBtnState);
+  addBuildingBtn.addEventListener("click", addBuilding);
+  addRoomBtn.addEventListener("click", addRoom);
+  closeRoomsModal.addEventListener("click", closeModal);
+  goToDashboard.addEventListener("click", () => window.location.href = "admin_dashboard.html");
+  signOutBtn.addEventListener("click", handleSignOut);
+}
+
+function handleCampusChange() {
+  selectedCampusId = campusSelect.value;
+  renderBuildings();
+  updateAddBuildingBtnState();
+}
+
+function handleSignOut() {
+  if (confirm("Are you sure you want to sign out?")) {
+    alert("Signed out!");
+    // window.location.href = "LoginPage.html";
+  }
+}
+
+// ---------- Building Functions ----------
 function renderBuildings() {
   buildingsContainer.innerHTML = "";
   if (!selectedCampusId) return;
@@ -74,15 +106,13 @@ function renderBuildings() {
     buildingsContainer.appendChild(div);
   });
 
-  lucide.createIcons(); // Re-render icons
+  lucide.createIcons();
 }
 
-// Enable/Disable Add Building button
 function updateAddBuildingBtnState() {
   addBuildingBtn.disabled = !newBuildingNameInput.value.trim() || !selectedCampusId;
 }
 
-// Add new building
 function addBuilding() {
   const name = newBuildingNameInput.value.trim();
   if (!name || !selectedCampusId) return;
@@ -90,7 +120,7 @@ function addBuilding() {
   const campus = campuses.find(c => c.id === selectedCampusId);
   const duplicate = campus.buildings.some(b => b.name.toLowerCase() === name.toLowerCase());
   if (duplicate) {
-    alert("A building with this name already exists in the selected campus.");
+    alert("A building with this name already exists.");
     return;
   }
 
@@ -102,7 +132,6 @@ function addBuilding() {
   renderBuildings();
 }
 
-// Edit building name
 function editBuilding(buildingId) {
   const campus = campuses.find(c => c.id === selectedCampusId);
   const building = campus.buildings.find(b => b.id === buildingId);
@@ -114,17 +143,19 @@ function editBuilding(buildingId) {
   }
 }
 
-// Delete building
 function deleteBuilding(buildingId) {
   if (!confirm("Are you sure you want to delete this building?")) return;
+
   const campus = campuses.find(c => c.id === selectedCampusId);
   campus.buildings = campus.buildings.filter(b => b.id !== buildingId);
+
   renderBuildings();
 }
 
-// Open Rooms Modal
+// ---------- Room Modal Functions ----------
 function openRoomsModal(buildingId) {
   selectedBuildingId = buildingId;
+
   const campus = campuses.find(c => c.id === selectedCampusId);
   const building = campus.buildings.find(b => b.id === buildingId);
 
@@ -134,7 +165,11 @@ function openRoomsModal(buildingId) {
   roomsModal.classList.remove("hidden");
 }
 
-// Render rooms in modal
+function closeModal() {
+  roomsModal.classList.add("hidden");
+  selectedBuildingId = null;
+}
+
 function renderRooms(rooms) {
   roomsList.innerHTML = "";
 
@@ -153,10 +188,10 @@ function renderRooms(rooms) {
         <span class="text-sm">${room}</span>
       </div>
       <div class="flex gap-2">
-        <button class="text-blue-500 hover:text-blue-700" title="Edit Room" onclick="editRoom(${idx}, '${room}')">
+        <button class="text-blue-500 hover:text-blue-700" onclick="editRoom(${idx}, '${room}')">
           <i data-lucide="pencil" class="w-4 h-4"></i>
         </button>
-        <button class="text-red-500 hover:text-red-700" title="Delete Room" onclick="removeRoom(${idx})">
+        <button class="text-red-500 hover:text-red-700" onclick="removeRoom(${idx})">
           <i data-lucide="trash" class="w-4 h-4"></i>
         </button>
       </div>
@@ -165,17 +200,9 @@ function renderRooms(rooms) {
     roomsList.appendChild(div);
   });
 
-  lucide.createIcons(); // Re-render icons
+  lucide.createIcons();
 }
 
-function editRoom(idx, currentName) {
-  const newName = prompt("Rename room:", currentName);
-  if (newName && newName.trim()) {
-    updateRoom(idx, newName.trim());
-  }
-}
-
-// Add room
 function addRoom() {
   const roomName = newRoomNameInput.value.trim();
   if (!roomName) return;
@@ -189,12 +216,18 @@ function addRoom() {
   }
 
   building.rooms.push(roomName);
-  renderRooms(building.rooms);
   newRoomNameInput.value = "";
+  renderRooms(building.rooms);
   renderBuildings();
 }
 
-// Update room name
+function editRoom(idx, currentName) {
+  const newName = prompt("Rename room:", currentName);
+  if (newName && newName.trim()) {
+    updateRoom(idx, newName.trim());
+  }
+}
+
 function updateRoom(idx, newName) {
   const campus = campuses.find(c => c.id === selectedCampusId);
   const building = campus.buildings.find(b => b.id === selectedBuildingId);
@@ -209,40 +242,14 @@ function updateRoom(idx, newName) {
   renderBuildings();
 }
 
-// Remove room
 function removeRoom(idx) {
   const campus = campuses.find(c => c.id === selectedCampusId);
   const building = campus.buildings.find(b => b.id === selectedBuildingId);
+
   building.rooms.splice(idx, 1);
   renderRooms(building.rooms);
   renderBuildings();
 }
 
-// Close modal
-function closeModal() {
-  roomsModal.classList.add("hidden");
-  selectedBuildingId = null;
-}
-
-// Event Listeners
-campusSelect.addEventListener("change", () => {
-  selectedCampusId = campusSelect.value;
-  renderBuildings();
-  updateAddBuildingBtnState();
-});
-
-newBuildingNameInput.addEventListener("input", updateAddBuildingBtnState);
-addBuildingBtn.addEventListener("click", addBuilding);
-addRoomBtn.addEventListener("click", addRoom);
-closeRoomsModal.addEventListener("click", closeModal);
-
-// Sign out
-document.getElementById("signOutBtn").addEventListener("click", () => {
-  if (confirm("Are you sure you want to sign out?")) {
-    alert("Signed out!");
-    // window.location.href = "LoginPage.html";
-  }
-});
-
-// Init
-populateCampusSelect();
+// ---------- Start ----------
+init();
