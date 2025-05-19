@@ -5,18 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Admin Dashboard - Buildings & Rooms</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="admin_building.js" defer></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="admin_building.js" defer></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
   <!-- Header -->
-  <header class="bg-blue-900 text-white p-4 shadow flex items-center justify-between">
-    <h1 class="text-xl font-semibold">Campus Buildings Admin Dashboard</h1>
-    <button id="signOutBtn" class="bg-red-600 hover:bg-red-700 px-3 py-1 rounded">Sign Out</button>
-  </header>
+  <div class="fixed top-0 w-full bg-blue-900 text-white flex items-center px-6 py-4 shadow z-50">
+    <span class="text-lg font-semibold">Buildings & Room Dashboard</span>
+    <button id="signOutBtn" class="ml-auto text-sm hover:underline">Sign Out</button>
+    <button id="goToDashboard" class="ml-4 bg-blue-700 hover:bg-blue-800 text-white font-medium py-1.5 px-4 rounded">
+      Return to Dashboard
+    </button>
+  </div>
 
-  <main class="flex-grow max-w-7xl mx-auto p-6">
+  <main class="flex-grow max-w-7xl mx-auto p-6 mt-24">
 
     <!-- Select Campus -->
     <div class="mb-8 max-w-sm">
@@ -37,23 +40,7 @@
 
     <!-- Buildings Container -->
     <section id="buildingsContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
-      <!-- Example static building card -->
-      <div class="p-4 bg-white rounded-lg shadow hover:shadow-lg flex flex-col items-center text-center">
-        <i data-lucide="building-2" class="text-blue-700 w-10 h-10 mb-2"></i>
-        <span class="font-semibold text-gray-900 mb-1">Sample Building</span>
-        <span class="text-sm text-gray-600 mb-2">3 rooms</span>
-        <div class="flex flex-col gap-1 w-full">
-          <button class="flex items-center justify-center gap-1 text-blue-600 hover:text-blue-800" onclick="editBuilding('sample-id')">
-            <i data-lucide="pencil-line" class="w-4 h-4"></i><span>Edit</span>
-          </button>
-          <button class="flex items-center justify-center gap-1 text-red-600 hover:text-red-800" onclick="deleteBuilding('sample-id')">
-            <i data-lucide="trash-2" class="w-4 h-4"></i><span>Delete</span>
-          </button>
-          <button class="flex items-center justify-center gap-1 text-green-600 hover:text-green-800" onclick="openRoomsModal('sample-id')">
-            <i data-lucide="door-open" class="w-4 h-4"></i><span>Rooms</span>
-          </button>
-        </div>
-      </div>
+      <!-- Dynamically populated -->
     </section>
   </main>
 
@@ -62,9 +49,9 @@
     <div class="bg-white rounded-lg shadow-lg w-[500px] p-6 relative">
       <h2 class="text-xl font-semibold mb-4 text-center text-blue-800" id="roomsModalTitle">Manage Rooms</h2>
 
-      <!-- Floorplan style room list -->
+      <!-- Room List -->
       <div id="roomsList" class="grid grid-cols-3 gap-4 mb-4 max-h-64 overflow-auto border border-gray-300 rounded p-4 bg-gray-50">
-        <!-- Rooms will be dynamically inserted here -->
+        <!-- Rooms populated dynamically -->
       </div>
 
       <!-- Add Room -->
@@ -79,7 +66,7 @@
   </div>
 
   <script>
-    lucide.createIcons();
+    lucide.createIcons(); // Initialize icons once the page loads
   </script>
 
 </body>
