@@ -2,355 +2,103 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="admin_dashboard.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="admin_dashboard.js"></script>
 </head>
-<body>
+<body class="bg-gray-100 text-gray-900 font-sans">
 
-  <!-- Sticky Top Tab with Wallpaper Background -->
-  <div class="top-tab">
-    <span class="tab-title">Welcome ADMIN!</span>
-    <button class="signout-button" onclick="signOut()">Sign Out</button>
+  <!-- Sticky Top Bar -->
+  <div class="bg-green-900 text-white py-4 px-6 flex justify-between items-center shadow-md sticky top-0 z-10">
+    <h1 class="text-xl font-semibold">Welcome ADMIN!</h1>
+    <button onclick="signOut()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm">Sign Out</button>
   </div>
 
-<!-- DASHBOARD BOXES -->
-<div class="dashboard-boxes">
-  <a href="admin_building.html" style="text-decoration: none; color: inherit;">
-  <div class="dashboard-box">
-    <div class="box-icon"></div>
-    <div class="box-label">Rooms Vacant</div>
+  <!-- Dashboard Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+    <a href="admin_building.html" class="bg-white shadow rounded-lg p-4 flex flex-col items-center hover:shadow-md transition">
+      <i class="ph ph-buildings text-green-700 text-3xl mb-2"></i>
+      <span class="font-semibold">Rooms Vacant</span>
+    </a>
+    <a href="admin_devices.html" class="bg-white shadow rounded-lg p-4 flex flex-col items-center hover:shadow-md transition">
+      <i class="ph ph-cpu text-green-700 text-3xl mb-2"></i>
+      <span class="font-semibold">Devices Online</span>
+    </a>
+    <a href="dashboard-maintenance.html" class="bg-white shadow rounded-lg p-4 flex flex-col items-center hover:shadow-md transition">
+      <i class="ph ph-wrench text-green-700 text-3xl mb-2"></i>
+      <span class="font-semibold">Maintenance</span>
+    </a>
+    <div class="bg-white shadow rounded-lg p-4 flex flex-col items-center">
+      <i class="ph ph-tag text-green-700 text-3xl mb-2"></i>
+      <span class="font-semibold">Notes & Tagging</span>
+    </div>
   </div>
-  </a>
-  <a href="admin_devices.html" style="text-decoration: none; color: inherit;">
-  <div class="dashboard-box">
-    <div class="box-icon"></div>
-    <div class="box-label">Devices Online</div>
-  </div>
-  </a>
-  <a href="dashboard-maintenance.html" style="text-decoration: none; color: inherit;">
-  <div class="dashboard-box">
-    <div class="box-icon"></div>
-    <div class="box-label">Maintenance</div>
-  </div>
-  </a>
-  <div class="dashboard-box">
-    <div class="box-icon"></div>
-    <div class="box-label">Notes & Tagging</div>
-  </div>
-</div>
 
-<!-- MAIN CONFIGURATION PANEL -->
-<div class="configuration-panel">
-  <!-- LEFT SIDE -->
-  <div class="left-panel">
-    <h1>Upload Static Map</h1>
-    <div class="map-container">
-      <div class="map-placeholder" onclick="document.getElementById('mapUpload').click()">
-        <span id="placeholderText">Click to upload static map</span>
-        <img id="mapImage" src="" alt="" style="display: none;" />
+  <!-- Configuration Section -->
+  <div class="flex flex-col lg:flex-row p-6 gap-6">
+    <!-- Upload Static Map -->
+    <div class="lg:w-1/2 bg-white shadow rounded-lg p-6">
+      <h2 class="text-xl font-bold mb-4">Upload Static Map</h2>
+      <div onclick="document.getElementById('mapUpload').click()" class="cursor-pointer border border-dashed border-gray-400 rounded-lg p-4 flex items-center justify-center h-48 bg-gray-50">
+        <span id="placeholderText" class="text-gray-500">Click to upload static map</span>
+        <img id="mapImage" class="hidden max-h-40" />
       </div>
-      <input type="file" id="mapUpload" accept="image/*" onchange="handleImageUpload(event)">
-      <div class="instruction">Only image files are allowed (e.g., JPG, PNG).</div>
+      <input type="file" id="mapUpload" class="hidden" accept="image/*" onchange="handleImageUpload(event)">
+      <p class="mt-2 text-sm text-gray-500">Only image files are allowed (e.g., JPG, PNG).</p>
+    </div>
+
+    <!-- Configuration Buttons -->
+    <div class="lg:w-1/2 bg-white shadow rounded-lg p-6 flex flex-col gap-4">
+      <button onclick="openCampusModal()" class="bg-green-700 hover:bg-green-800 text-white py-2 px-4 rounded flex items-center gap-2">
+        <i class="ph ph-buildings text-lg"></i> Configure Campuses
+      </button>
+
+      <a href="admin_building.html" class="bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 rounded flex items-center gap-2">
+        <i class="ph ph-layout text-lg"></i> Configure Room & Building
+      </a>
+
+      <!-- View Campuses -->
+      <button onclick="toggleCampusList()" class="text-left text-green-800 font-medium hover:underline mt-4">
+        <i class="ph ph-eye"></i> View Configured Campuses
+      </button>
+      <div id="campusList" class="mt-2 text-gray-700 hidden">
+        <ul class="list-disc ml-5 text-sm">
+          <li>Campus A - 123 Main Street</li>
+          <li>Campus B - 456 Elm Avenue</li>
+        </ul>
+      </div>
+
+      <!-- View Buildings -->
+      <button onclick="toggleBuildingList()" class="text-left text-green-800 font-medium hover:underline">
+        <i class="ph ph-eye"></i> View Configured Buildings
+      </button>
+      <div id="buildingList" class="mt-2 text-gray-700 hidden">
+        <ul class="list-disc ml-5 text-sm">
+          <li>Building X - Campus A</li>
+          <li>Building Y - Campus B</li>
+        </ul>
+      </div>
     </div>
   </div>
 
-  <!-- RIGHT SIDE -->
-  <div class="right-panel">
-    <button class="button" onclick="openCampusModal()">Configure Campuses</button>
-    <button class="button" onclick="openModal()">Configure Room & Building</button>
-    <div class="building-toggle">
-      <div class="building-header" onclick="toggleBuildingList()">View Configured Buildings</div>
-      <div class="building-list" id="buildingList"></div>
-      <button class="button" style="margin-top: 10px;" onclick="toggleCampusList()">View Campuses</button>
-      <div id="campusList" style="margin-top: 15px; color: #046013; font-weight: bold; display: none;"></div>
+  <!-- Campus Modal -->
+  <div id="campusModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
+      <button onclick="closeCampusModal()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
+        <i class="ph ph-x text-lg"></i>
+      </button>
+      <h2 class="text-xl font-semibold mb-4">Configure Campus</h2>
+      <label class="block mb-1 text-sm font-medium">Campus Name</label>
+      <input type="text" id="campusName" class="w-full border rounded px-3 py-2 mb-3" placeholder="Enter campus name" />
+      <label class="block mb-1 text-sm font-medium">Campus Address</label>
+      <input type="text" id="campusAddress" class="w-full border rounded px-3 py-2 mb-4" placeholder="Enter campus address" />
+      <button onclick="saveCampus()" class="bg-green-700 hover:bg-green-800 text-white w-full py-2 rounded">
+        Save Campus
+      </button>
     </div>
   </div>
-</div>
-
-<!-- CAMPUS CONFIGURATION MODAL -->
-<div id="campusModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeCampusModal()">&times;</span>
-    <h2>Configure Campus</h2>
-    <label>Campus Name:</label>
-    <input type="text" id="campusName" placeholder="Enter campus name" />
-    <label>Campus Address:</label>
-    <input type="text" id="campusAddress" placeholder="Enter campus address" />
-    <button onclick="saveCampus()">Save Campus</button>
-  </div>
-</div>
-
-
-<!-- MODAL POPUP -->
-<div id="configModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <h2>Configure Building</h2>
-
-    <label>Select Campus:</label>
-    <select id="campusDropdown" onchange="handleCampusChange()">
-      <option value="no-campus" selected disabled>Select a campus</option>
-      <!-- Campus options will be populated dynamically -->
-    </select>
-
-    <label>Building Name:</label>
-    <input type="text" id="buildName" placeholder="Enter Building name" />
-
-    <label>Number of Floors:</label>
-    <input type="number" id="floorCount" placeholder="Enter number of floors" />
-
-    <button id="saveBuildingBtn" onclick="saveConfiguration()" disabled>Save</button>
-  </div>
-</div>
-
-
-<script>
-
-const buildingData = {}; //building list
-const campusData = {}; // campus list
-
-//data list is set to fasle (not visible)
-let isBuildingListVisible = false;
-let isCampusListVisible = false;
-
-//opens the dialog box for room & building
-function openModal() {
-  populateCampusDropdown(); // Load campuses into dropdown
-  document.getElementById("configModal").style.display = "block";
-}
-//closes the dialog box for room and building
-function closeModal() {
-  document.getElementById("configModal").style.display = "none";
-}
-//opens the dialog box for configure campuses
-function openCampusModal(){
-  document.getElementById("campusModal").style.display = "block";
-}
-//close the dialog box for configure campuses
-function closeCampusModal(){
-  document.getElementById("campusModal").style.display = "none";
-}
-
-function handleCampusChange() {
-  const dropdown = document.getElementById("campusDropdown");
-  const saveBtn = document.getElementById("saveBuildingBtn");
-  saveBtn.disabled = dropdown.value === "no-campus";
-}
-
-//saves the data of the newly added campus
-function saveCampus(){
-  const campus = document.getElementById("campusName").value.trim();
-  const address = document.getElementById("campusAddress").value.trim();
-
-  if (!campus || !address){ //campus and address has no inputs then alert
-    alert("Please fill in both campus and address.");
-    return;
-  }
-
-  campusData[campus] = address;
-  updateCampusList();
-  closeCampusModal();
-  alert(`Campus "${campus}" saved successfully`);
-
-  document.getElementById("campusName").value = "";
-  document.getElementById("campusAddress").value = "";
-}
-
-function updateCampusList() {
-  const listContainer = document.getElementById("campusList");
-  listContainer.innerHTML = "<h3>Configured Campuses:</h3>";
-
-  for (const campus in campusData) {
-    const item = document.createElement("div");
-    item.style.display = "flex";
-    item.style.justifyContent = "space-between";
-    item.style.alignItems = "center";
-    item.style.marginBottom = "5px";
-
-    const text = document.createElement("span");
-    text.textContent = `${campus} - ${campusData[campus]}`;
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Delete";
-    deleteBtn.style.marginLeft = "10px";
-    deleteBtn.style.padding = "2px 8px";
-    deleteBtn.style.backgroundColor = "#e74c3c";
-    deleteBtn.style.color = "#fff";
-    deleteBtn.style.border = "none";
-    deleteBtn.style.borderRadius = "4px";
-    deleteBtn.style.cursor = "pointer";
-    deleteBtn.onclick = function () {
-      if (confirm(`Are you sure you want to delete the campus "${campus}"?`)) {
-        delete campusData[campus];
-        updateCampusList();
-        alert(`Campus "${campus}" has been deleted.`);
-      }
-    };
-
-    item.appendChild(text);
-    item.appendChild(deleteBtn);
-    listContainer.appendChild(item);
-  }
-}
-
-
-function saveConfiguration() {
-  const campusDropdown = document.getElementById("campusDropdown");
-  const campus = campusDropdown.value;
-  const building = document.getElementById("buildName").value.trim();
-  const floor = parseInt(document.getElementById("floorCount").value);
-
-  // Prevent saving if no campus is selected (placeholder has value "no-campus")
-  if (!campus || campus === "no-campus") {
-    alert("Please select a campus before saving the building.");
-    return;
-  }
-
-  // Validate other fields
-  if (!building || isNaN(floor) || floor <= 0) {
-    alert("Please enter a valid building name and floor count.");
-    return;
-  }
-
-  const buildingKey = `${campus} - ${building}`;
-  buildingData[buildingKey] = floor;
-
-  updateBuildingList();
-  closeModal();
-  alert(`Saved: ${buildingKey} with ${floor} floors`);
-
-  // Reset form
-  document.getElementById("buildName").value = "";
-  document.getElementById("floorCount").value = "";
-}
-
-function updateBuildingList() {
-  const listContainer = document.getElementById("buildingList");
-  listContainer.innerHTML = "";
-
-  for (const building in buildingData) {
-    const item = document.createElement("div");
-    item.className = "building-item";
-    item.style.display = "flex";
-    item.style.justifyContent = "space-between";
-    item.style.alignItems = "center";
-    item.style.cursor = "pointer";
-    item.style.marginBottom = "5px";
-
-    const buildingText = document.createElement("span");
-    buildingText.textContent = building;
-    buildingText.onclick = function () {
-      const floors = document.createElement("div");
-      floors.className = "floor-list";
-      floors.innerHTML = "";
-      for (let i = 1; i <= buildingData[building]; i++) {
-        const floor = document.createElement("div");
-        floor.textContent = `Floor ${i}`;
-        floors.appendChild(floor);
-      }
-
-      const existing = item.querySelector(".floor-list");
-      if (existing) {
-        existing.remove();
-      } else {
-        item.appendChild(floors);
-      }
-    };
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Delete";
-    deleteBtn.style.marginLeft = "10px";
-    deleteBtn.style.padding = "2px 8px";
-    deleteBtn.style.backgroundColor = "#e74c3c";
-    deleteBtn.style.color = "#fff";
-    deleteBtn.style.border = "none";
-    deleteBtn.style.borderRadius = "4px";
-    deleteBtn.style.cursor = "pointer";
-
-    deleteBtn.onclick = function (event) {
-      event.stopPropagation(); // prevent triggering floor toggle
-      if (confirm(`Are you sure you want to delete the building "${building}"?`)) {
-        delete buildingData[building];
-        updateBuildingList();
-        alert(`Building "${building}" deleted.`);
-      }
-    };
-
-    item.appendChild(buildingText);
-    item.appendChild(deleteBtn);
-    listContainer.appendChild(item);
-  }
-}
-
-
-//SHOWS LIST OF EXISITNG BUILDINGS
-function toggleBuildingList() {
-  const list = document.getElementById("buildingList");
-  isBuildingListVisible = !isBuildingListVisible;
-  list.style.display = isBuildingListVisible ? "block" : "none";
-}
-//SHOWS LIST OF EXISITNG CAMPUSES
-function toggleCampusList() {
-  const list = document.getElementById("campusList");
-  isCampusListVisible = !isCampusListVisible;
-  list.style.display = isCampusListVisible ? "block" : "none";
-}
-
-//POPULATE DROPDOWN FOR CAMPUS SELECTION
-function populateCampusDropdown() {
-  const dropdown = document.getElementById("campusDropdown");
-  const saveBtn = document.getElementById("saveBuildingBtn");
-  dropdown.innerHTML = ""; // Clear old options
-
-  const placeholder = document.createElement("option");
-  placeholder.value = "no-campus";
-  placeholder.textContent = "Select a campus";
-  placeholder.disabled = true;
-  placeholder.selected = true;
-  dropdown.appendChild(placeholder);
-
-  for (const campus in campusData) {
-    const option = document.createElement("option");
-    option.value = campus;
-    option.textContent = campus;
-    dropdown.appendChild(option);
-  }
-
-  // Initially disable the button
-  saveBtn.disabled = false;
-
-  // Enable save button only when valid campus selected
-  dropdown.addEventListener("change", () => {
-    saveBtn.disabled = dropdown.value === "no-campus";
-  });
-}
-
-
-function handleImageUpload(event) {
-  const file = event.target.files[0];
-  if (file && file.type.startsWith("image/")) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const mapImage = document.getElementById("mapImage");
-      mapImage.src = e.target.result;
-      mapImage.style.display = "block";
-      document.getElementById("placeholderText").style.display = "none";
-    };
-    reader.readAsDataURL(file);
-  } else {
-    alert("Please select a valid image file.");
-  }
-}
-
-function signOut() {
-  if (confirm("Are you sure you want to sign out?")) {
-    // Example action: redirect to login page
-    window.location.href = "LoginPage.html"; // Change this to your actual login page
-  }
-}
-
-</script>
 
 </body>
 </html>
