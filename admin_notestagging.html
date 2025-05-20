@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Notes & Tagging</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script defer src="admin_notestagging.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+
+  <!-- Header -->
+  <div class="bg-green-900 text-white py-4 px-6 flex justify-between items-center shadow-md sticky top-0 z-10">
+    <h1 class="text-xl font-semibold">Notes & Tagging Dashboard</h1>
+    <button onclick="signOut()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm">Sign Out</button>
+  </div>
+
+  <!-- Main Section -->
+  <div class="p-6 max-w-7xl mx-auto">
+    <!-- Add Note Section -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6">
+      <h2 class="text-lg font-semibold mb-4">Add New Note</h2>
+      <div class="flex flex-col gap-4">
+        <input id="noteTitle" type="text" placeholder="Note Title" class="border rounded px-4 py-2" />
+        <textarea id="noteContent" placeholder="Note Content" rows="4" class="border rounded px-4 py-2"></textarea>
+        <input id="noteTag" type="text" placeholder="Tag (e.g., Campus, Room, Maintenance)" class="border rounded px-4 py-2" />
+        <button onclick="addNote()" class="bg-green-700 hover:bg-green-800 text-white py-2 px-4 rounded w-fit">
+          <i class="ph ph-plus mr-1"></i> Add Note
+        </button>
+      </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="mb-4">
+      <input id="filterTag" type="text" placeholder="Filter by tag..." class="border px-4 py-2 rounded w-full max-w-sm" oninput="filterNotes()" />
+    </div>
+
+    <!-- Notes List -->
+    <div id="notesContainer" class="grid gap-4">
+      <!-- Notes will appear here -->
+    </div>
+  </div>
+
+</body>
+</html>
